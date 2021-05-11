@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:startup_namer/widgets/country_favorite_widget.dart';
 
 import '../models/country.dart';
 
@@ -31,21 +32,21 @@ class CountryWidget extends StatelessWidget {
         margin: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            Stack(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Stack(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    child: SvgPicture.network(
+                      item.flag!,
+                      height: 250,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: SvgPicture.network(
-                    item.flag!,
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(10),
@@ -74,7 +75,7 @@ class CountryWidget extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Languages: ' + getLanguage(),
@@ -83,6 +84,7 @@ class CountryWidget extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
+                        CountryFavoriteWidget(item),
                       ],
                     ),
                   ),

@@ -38,6 +38,10 @@ dependencies:
   # Your other regular dependencies here
   json_annotation: ^4.0.1
   flutter_svg: ^0.22.0
+  flutter_cache_manager: ^3.0.2
+  hive: ^2.0.4
+  hive_flutter: ^1.0.0
+  path_provider: ^2.0.1
 dev_dependencies:
   # Your other dev_dependencies here
   build_runner: ^2.0.2

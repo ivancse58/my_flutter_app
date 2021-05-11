@@ -1,11 +1,11 @@
 //@JsonSerializable()
-class LanguageResponse {
+class LanguageModel {
   String? name;
   String? iso639_1;
   String? iso639_2;
   String? nativeName;
 
-  LanguageResponse(
+  LanguageModel(
     this.name,
     this.iso639_1,
     this.iso639_2,
@@ -14,12 +14,12 @@ class LanguageResponse {
 }
 
 //@JsonSerializable()
-class Currency {
+class CurrencyModel {
   String? code;
   String? name;
   String? symbol;
 
-  Currency(
+  CurrencyModel(
     this.code,
     this.name,
     this.symbol,
@@ -27,17 +27,17 @@ class Currency {
 }
 
 //@JsonSerializable()
-class Country {
+class CountryModel {
   String? name;
   String? alpha2Code;
   String? alpha3Code;
   String? flag;
   bool? isFav;
-  List<Currency>? currencies;
-  List<LanguageResponse>? languages;
+  List<CurrencyModel>? currencies;
+  List<LanguageModel>? languages;
   List<String>? callingCodes;
 
-  Country(
+  CountryModel(
     this.name,
     this.alpha2Code,
     this.alpha3Code,

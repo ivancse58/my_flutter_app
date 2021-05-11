@@ -4,12 +4,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'country.dart';
-import 'item_card.dart';
+import 'models/country.dart';
+import 'widgets/country_widget.dart';
 import 'main.dart';
 
 class DataListAppState extends State<MyApp> {
-  late Future<List<Country>> futureCountries;
+  late Future<List<CountryModel>> futureCountries;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class DataListAppState extends State<MyApp> {
           title: Text('Fetch All Countries'),
         ),
         body: Center(
-          child: FutureBuilder<List<Country>>(
+          child: FutureBuilder<List<CountryModel>>(
             future: futureCountries,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -56,16 +56,16 @@ class DataListAppState extends State<MyApp> {
   }
 }
 
-List<Country> parseCountries(String responseBody) {
+List<CountryModel> parseCountries(String responseBody) {
   print("---------parseCountries---------");
   //print(responseBody);
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed.map<Country>((json) => _$CountryFromJson(json)).toList();
+  return parsed.map<CountryModel>((json) => _$CountryFromJson(json)).toList();
 }
 
 // GET https://restcountries.eu/rest/v2/all
-Future<List<Country>> fetchCountry() async {
+Future<List<CountryModel>> fetchCountry() async {
   final response = await http.get(Uri.https('restcountries.eu', 'rest/v2/all'));
   //print(response.statusCode);
   if (response.statusCode == 200) {
@@ -81,8 +81,8 @@ Future<List<Country>> fetchCountry() async {
 // JsonSerializableGenerator
 // **************************************************************************
 
-LanguageResponse _$LanguageResponseFromJson(Map<String, dynamic> json) {
-  return LanguageResponse(
+LanguageModel _$LanguageResponseFromJson(Map<String, dynamic> json) {
+  return LanguageModel(
     json['name'] as String?,
     json['iso639_1'] as String?,
     json['iso639_2'] as String?,
@@ -90,7 +90,7 @@ LanguageResponse _$LanguageResponseFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$LanguageResponseToJson(LanguageResponse instance) =>
+Map<String, dynamic> _$LanguageResponseToJson(LanguageModel instance) =>
     <String, dynamic>{
       'name': instance.name,
       'iso639_1': instance.iso639_1,
@@ -98,22 +98,22 @@ Map<String, dynamic> _$LanguageResponseToJson(LanguageResponse instance) =>
       'nativeName': instance.nativeName,
     };
 
-Currency _$CurrencyFromJson(Map<String, dynamic> json) {
-  return Currency(
+CurrencyModel _$CurrencyFromJson(Map<String, dynamic> json) {
+  return CurrencyModel(
     json['code'] as String?,
     json['name'] as String?,
     json['symbol'] as String?,
   );
 }
 
-Map<String, dynamic> _$CurrencyToJson(Currency instance) => <String, dynamic>{
+Map<String, dynamic> _$CurrencyToJson(CurrencyModel instance) => <String, dynamic>{
       'code': instance.code,
       'name': instance.name,
       'symbol': instance.symbol,
     };
 
-Country _$CountryFromJson(Map<String, dynamic> json) {
-  return Country(
+CountryModel _$CountryFromJson(Map<String, dynamic> json) {
+  return CountryModel(
     json['name'] as String?,
     json['alpha2Code'] as String?,
     json['alpha3Code'] as String?,
@@ -132,7 +132,7 @@ Country _$CountryFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$CountryToJson(Country instance) => <String, dynamic>{
+Map<String, dynamic> _$CountryToJson(CountryModel instance) => <String, dynamic>{
       'name': instance.name,
       'alpha2Code': instance.alpha2Code,
       'alpha3Code': instance.alpha3Code,

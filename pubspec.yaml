@@ -43,6 +43,7 @@ dependencies:
   hive_flutter: ^1.0.0
   hive_generator: ^1.1.0
   path_provider: ^2.0.1
+  fluttertoast: ^8.0.6
 dev_dependencies:
   # Your other dev_dependencies here
   build_runner: ^2.0.2

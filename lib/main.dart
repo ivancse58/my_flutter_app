@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -69,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Center(
           child: FutureBuilder(
-            future: apiService.fetchCountry(),
+            future: apiService.fetchCountryWithCache(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
@@ -77,15 +78,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (countryList.contains(APIService.empty)) {
                   return buildEmptyWidget();
                 } else
-                  return ListView.builder(
-                    // Let the ListView know how many items it needs to build.
-                    itemCount: countryList.length,
-                    // Provide a builder function. This is where the magic happens.
-                    // Convert each item into a widget based on the type of item it is.
-                    itemBuilder: (context, index) {
-                      final item = countryList[index];
-                      return CountryWidget(item);
-                    },
+                  return RefreshIndicator(
+                    onRefresh: () => apiService.updateData(() {
+                      Fluttertoast.showToast(
+                          msg: "Update to update data!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }, setState),
+                    child: ListView.builder(
+                      // Let the ListView know how many items it needs to build.
+                      itemCount: countryList.length,
+                      // Provide a builder function. This is where the magic happens.
+                      // Convert each item into a widget based on the type of item it is.
+                      itemBuilder: (context, index) {
+                        final item = countryList[index];
+                        return CountryWidget(item);
+                      },
+                    ),
                   );
               } else if (snapshot.connectionState != ConnectionState.done ||
                   snapshot.hasError) {

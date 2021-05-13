@@ -13,7 +13,7 @@ class APIService {
   List countryList = [];
 
   // GET https://restcountries.eu/rest/v2/all
-  Future<bool> fetchCountry() async {
+  Future<bool> fetchCountryWithCache() async {
     //await Future.delayed(Duration(seconds: 5));
 
     print('fetchCountry');
@@ -43,6 +43,24 @@ class APIService {
     }
 
     return Future.value(true);
+  }
+
+  Future<void> updateData(Function showToast, Function updateState) async {
+    print('updateData');
+    try {
+      final response =
+          await http.get(Uri.https('restcountries.eu', 'rest/v2/all'));
+      if (response.statusCode == 200) {
+        final data = parseCountries(response.body);
+        print('Saving data into hive');
+
+        await saveDataIntoHive(data);
+      } else {
+        showToast();
+      }
+    } catch (e) {
+      showToast();
+    }
   }
 
   Future saveDataIntoHive(data) async {

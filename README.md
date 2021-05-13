@@ -15,6 +15,6 @@ Some flutter command:
 > flutter run
 
 ## Next Task List
-- [ ] 2nd Step: Update UI and show flag, and navigate to new view when click item
-- [ ] 3rd Step: Save fav country at cache and filter items
+- [X] 2nd Step: Update UI and show flag, and navigate to new view when click item
+- [X] 3rd Step: Save fav country at cache and filter items
 - [ ] 4th Step: Unit test

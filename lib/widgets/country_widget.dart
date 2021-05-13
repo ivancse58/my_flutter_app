@@ -6,6 +6,8 @@ import 'package:startup_namer/widgets/country_favorite_widget.dart';
 import '../models/country.dart';
 
 class CountryWidget extends StatelessWidget {
+  static const _flagHeight = 250.0;
+
   final CountryModel item;
 
   CountryWidget(this.item);
@@ -40,9 +42,15 @@ class CountryWidget extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     child: SvgPicture.network(
                       item.flag!,
-                      height: 250,
+                      height: _flagHeight,
                       width: double.infinity,
                       fit: BoxFit.cover,
+                      placeholderBuilder: (BuildContext ctx) => Container(
+                        height: _flagHeight,
+                        width: double.infinity,
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                      cacheColorFilter: true,
                     ),
                   ),
                 ],

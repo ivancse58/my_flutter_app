@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:startup_namer/screens/country_screen.dart';
 import 'package:startup_namer/widgets/country_favorite_widget.dart';
 
 import '../models/country.dart';
@@ -11,6 +12,20 @@ class CountryWidget extends StatelessWidget {
   final CountryModel item;
 
   CountryWidget(this.item);
+
+  void selectCategory(BuildContext ctx) {
+    Navigator.of(ctx).pushNamed(
+      CountryScreen.routeName,
+      arguments: {
+        'name': item.name,
+        'alpha2': item.alpha2Code,
+        'alpha3': item.alpha3Code,
+        'flag': item.flag,
+        'callingCode': item.callingCodes!.first.toString(),
+        'language': getLanguage(),
+      },
+    );
+  }
 
   String getLanguage() {
     var languages = StringBuffer();
@@ -25,7 +40,7 @@ class CountryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => {},
+      onTap: () => selectCategory(context),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -92,7 +107,7 @@ class CountryWidget extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        CountryFavoriteWidget(item),
+                        CountryFavoriteWidget(item.alpha2Code, item.alpha3Code),
                       ],
                     ),
                   ),

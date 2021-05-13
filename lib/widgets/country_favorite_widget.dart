@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../models/country.dart';
-
 class CountryFavoriteWidget extends StatefulWidget {
   static const boxName = 'CountryFavorite';
-  final CountryModel item;
+  final String? alpha2Code;
+  final String? alpha3Code;
 
-  CountryFavoriteWidget(this.item);
+  CountryFavoriteWidget(this.alpha2Code, this.alpha3Code);
 
   bool _isFavorite(Box box) {
-    var key = item.alpha2Code.toString() + '-' + item.alpha3Code.toString();
+    var key = alpha2Code.toString() + '-' + alpha3Code.toString();
     final bool? value = (box).get(key) as bool?;
     var val = false;
     if (value != null) val = value;
@@ -20,7 +19,7 @@ class CountryFavoriteWidget extends StatefulWidget {
 
   void _setAsFavorite(Box box) {
     var val = _isFavorite(box);
-    var key = item.alpha2Code.toString() + '-' + item.alpha3Code.toString();
+    var key = alpha2Code.toString() + '-' + alpha3Code.toString();
 
     box.put(key, !val);
     print(val);

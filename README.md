@@ -13,7 +13,10 @@ Some flutter command:
 > flutter create flutter_complete_guide
 - Run app
 > flutter run
-
+## Overall app flow:
+![Alt text](/resources/app_diagram.png?raw=true "App flow")
+## App widget tree
+![Alt text](/resources/app_wdiget_tree.png?raw=true "App widget tree")
 ## Next Task List
 - [X] 2nd Step: Update UI and show flag, and navigate to new view when click item
 - [X] 3rd Step: Save fav country at cache and filter items

@@ -86,18 +86,11 @@ class CountryWidget extends StatelessWidget {
                     children: [
                       Text(
                         item.name!,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                        ),
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       Text(
                         callingCode,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.purple,
-                        ),
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
                   ),
@@ -108,10 +101,7 @@ class CountryWidget extends StatelessWidget {
                       children: [
                         Text(
                           language,
-                          style: TextStyle(
-                            color: Colors.lightBlueAccent,
-                            fontSize: 16,
-                          ),
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
                         CountryFavoriteWidget(item.alpha2Code, item.alpha3Code),
                       ],

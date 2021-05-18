@@ -52,17 +52,34 @@ class _MyHomePageState extends State<MyHomePage> {
           primarySwatch: Colors.blue,
           accentColor: Colors.amber,
           textTheme: ThemeData.light().textTheme.copyWith(
-              body1: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
+                bodyText1: TextStyle(
+                  color: Color.fromRGBO(20, 51, 51, 1),
+                ),
+                bodyText2: TextStyle(
+                  color: Color.fromRGBO(20, 51, 51, 1),
+                ),
+                headline2: TextStyle(
+                  fontSize: 22,
+                  fontFamily: 'RobotoCondensed',
+                  fontWeight: FontWeight.bold,
+                ),
+                headline4: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'RobotoCondensed',
+                  fontWeight: FontWeight.bold,
+                ),
+                headline6: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'RobotoCondensed',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple,
+                ),
+                subtitle2: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'RobotoCondensed',
+                  color: Colors.lightBlueAccent,
+                ),
               ),
-              body2: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              title: TextStyle(
-                fontSize: 20,
-                fontFamily: 'RobotoCondensed',
-                fontWeight: FontWeight.bold,
-              )),
         ),
         initialRoute: '/',
         // default is '/'

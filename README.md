@@ -17,4 +17,5 @@ Some flutter command:
 ## Next Task List
 - [X] 2nd Step: Update UI and show flag, and navigate to new view when click item
 - [X] 3rd Step: Save fav country at cache and filter items
-- [ ] 4th Step: Unit test
+- [ ] 4th Step: Simple app state management using: flutter provider
+- [ ] 5th Step: Unit test

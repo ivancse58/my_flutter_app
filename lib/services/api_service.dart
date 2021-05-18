@@ -4,10 +4,16 @@ import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/country.dart';
+import '../utils/app_messages.dart';
+import '../utils/debug_logger.dart';
 
 class APIService {
+  final logger = DebugLogger();
   static const boxName = 'CountryData';
   static const empty = 'empty';
+  static const baseUrl = 'restcountries.eu';
+  static const path = 'rest/v2/all';
+  static const _status_code_200 = 200;
 
   late Box _box;
   List countryList = [];
@@ -16,23 +22,23 @@ class APIService {
   Future<bool> fetchCountryWithCache() async {
     //await Future.delayed(Duration(seconds: 5));
 
-    print('fetchCountry');
+    logger.log('fetchCountry');
     _box = await Hive.openBox(boxName);
-    print('open box');
+    logger.log('open box');
     try {
-      final response =
-          await http.get(Uri.https('restcountries.eu', 'rest/v2/all'));
-      print('statusCode = ${response.statusCode}');
-      if (response.statusCode == 200) {
+      final response = await http.get(Uri.https(baseUrl, path));
+      logger.log('statusCode = ${response.statusCode}');
+      if (response.statusCode == _status_code_200) {
         final data = parseCountries(response.body);
-        print('Saving data into hive');
+        logger.log('Saving data into hive');
 
         await saveDataIntoHive(data);
       } else {
         throw Exception('Unable to load data!');
       }
     } catch (e) {
-      print('Unable to load data!');
+      logger.log(e);
+      throw Exception('Unable to load data!');
     }
 
     var myMap = _box.toMap().values.toList();
@@ -46,20 +52,20 @@ class APIService {
   }
 
   Future<void> updateData(Function showToast, Function updateState) async {
-    print('updateData');
+    logger.log('updateData');
     try {
-      final response =
-          await http.get(Uri.https('restcountries.eu', 'rest/v2/all'));
-      if (response.statusCode == 200) {
+      final response = await http.get(Uri.https(baseUrl, path));
+      if (response.statusCode == _status_code_200) {
         final data = parseCountries(response.body);
-        print('Saving data into hive');
+        logger.log('Saving data into hive');
 
         await saveDataIntoHive(data);
+        showToast(AppMessages.updateSuccessMessage);
       } else {
-        showToast();
+        showToast(AppMessages.updateErrorMessage);
       }
     } catch (e) {
-      showToast();
+      showToast(AppMessages.updateErrorMessage);
     }
   }
 
@@ -68,14 +74,14 @@ class APIService {
     for (var d in data) {
       _box.add(d);
     }
-    print('save data into hive done');
+    logger.log('save data into hive done');
   }
-}
 
-List<CountryModel> parseCountries(String responseBody) {
-  print("---------parseCountries---------");
-  //print(responseBody);
-  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  List<CountryModel> parseCountries(String responseBody) {
+    logger.log("---------parseCountries---------");
+    //print(responseBody);
+    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
 
-  return parsed.map<CountryModel>((json) => $CountryFromJson(json)).toList();
+    return parsed.map<CountryModel>((json) => $CountryFromJson(json)).toList();
+  }
 }

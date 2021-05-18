@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:startup_namer/screens/country_screen.dart';
-import 'package:startup_namer/widgets/country_favorite_widget.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../models/country.dart';
+import '../screens/country_screen.dart';
+import '../utils/app_messages.dart';
+import '../widgets/country_favorite_widget.dart';
 
 class CountryWidget extends StatelessWidget {
   static const _flagHeight = 250.0;
@@ -39,6 +41,10 @@ class CountryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final callingCode = sprintf(
+        AppMessages.label_calling_codes, [item.callingCodes!.first.toString()]);
+    final language = sprintf(AppMessages.label_languages, [getLanguage()]);
+
     return InkWell(
       onTap: () => selectCategory(context),
       child: Card(
@@ -86,7 +92,7 @@ class CountryWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Calling Codes: ' + item.callingCodes!.first.toString(),
+                        callingCode,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -101,7 +107,7 @@ class CountryWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Languages: ' + getLanguage(),
+                          language,
                           style: TextStyle(
                             color: Colors.lightBlueAccent,
                             fontSize: 16,

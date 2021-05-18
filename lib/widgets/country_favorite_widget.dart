@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../utils/debug_logger.dart';
+
 class CountryFavoriteWidget extends StatefulWidget {
+  final logger = DebugLogger();
   static const boxName = 'CountryFavorite';
   final String? alpha2Code;
   final String? alpha3Code;
@@ -22,7 +25,7 @@ class CountryFavoriteWidget extends StatefulWidget {
     var key = alpha2Code.toString() + '-' + alpha3Code.toString();
 
     box.put(key, !val);
-    print(val);
+    logger.log(val);
   }
 
   @override

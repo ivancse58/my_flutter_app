@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:startup_namer/widgets/country_favorite_widget.dart';
+import 'package:sprintf/sprintf.dart';
+
+import '../utils/app_messages.dart';
+import '../widgets/country_favorite_widget.dart';
 
 class CountryScreen extends StatelessWidget {
   static const routeName = '/country-item';
@@ -12,15 +15,18 @@ class CountryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //final country = Provider.of<CountryModel>(context, listen: false);
+
     final routeArgs =
         ModalRoute.of(context)!.settings.arguments as Map<String, String?>;
     final name = routeArgs['name'];
     final alpha2 = routeArgs['alpha2'];
     final alpha3 = routeArgs['alpha3'];
     final flag = routeArgs['flag'];
-    final callingCode = routeArgs['callingCode'];
-    final language = routeArgs['language'];
-
+    final callingCode =
+        sprintf(AppMessages.label_calling_codes, [routeArgs['callingCode']]);
+    final language =
+        sprintf(AppMessages.label_languages, [routeArgs['language']]);
     return Scaffold(
       appBar: AppBar(
         title: Text(name!),
@@ -74,7 +80,7 @@ class CountryScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Calling Codes: $callingCode',
+                              callingCode,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -89,7 +95,7 @@ class CountryScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Languages: $language',
+                                language,
                                 style: TextStyle(
                                   color: Colors.lightBlueAccent,
                                   fontSize: 16,

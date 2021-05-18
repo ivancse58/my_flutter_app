@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../services/api_service.dart';
+import '../utils/app_messages.dart';
+import '../utils/debug_logger.dart';
 import '../widgets/country_widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -10,9 +12,11 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final logger = DebugLogger();
   final APIService apiService = APIService();
 
-  Widget buildEmptyWidget() {
+  Widget buildEmptyWidget(String errorMessage) {
+    logger.log(errorMessage);
     return InkWell(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -20,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'No data found! Try Again?',
+              errorMessage,
               style: TextStyle(color: Colors.red),
             ),
             Icon(Icons.replay),
@@ -45,14 +49,14 @@ class _MainScreenState extends State<MainScreen> {
                 snapshot.hasData) {
               List countryList = apiService.countryList;
               if (countryList.contains(APIService.empty)) {
-                return buildEmptyWidget();
+                return buildEmptyWidget(AppMessages.emptyMessage);
               } else
                 return RefreshIndicator(
-                  onRefresh: () => apiService.updateData(() {
+                  onRefresh: () => apiService.updateData((value) {
                     Fluttertoast.showToast(
-                        msg: "Update to update data!",
+                        msg: value,
                         toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
+                        gravity: ToastGravity.TOP,
                         timeInSecForIosWeb: 1,
                         backgroundColor: Colors.red,
                         textColor: Colors.white,
@@ -71,7 +75,7 @@ class _MainScreenState extends State<MainScreen> {
                 );
             } else if (snapshot.connectionState != ConnectionState.done ||
                 snapshot.hasError) {
-              return buildEmptyWidget();
+              return buildEmptyWidget(AppMessages.errorMessage);
             }
             // By default, show a loading spinner.
             return CircularProgressIndicator();

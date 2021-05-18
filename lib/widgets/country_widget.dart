@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
 import '../models/country.dart';
+import '../providers/country_provider.dart';
 import '../screens/country_screen.dart';
 import '../utils/app_messages.dart';
 import '../widgets/country_favorite_widget.dart';
@@ -15,8 +17,11 @@ class CountryWidget extends StatelessWidget {
 
   CountryWidget(this.item);
 
-  void selectCategory(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(
+  void selectCategory(BuildContext ctx, String lanStr, String callingCodeStr) {
+    Provider.of<CountryProvider>(ctx, listen: false)
+        .setCountry(item, lanStr, callingCodeStr);
+    Navigator.of(ctx).pushNamed(CountryScreen.routeName);
+    /*Navigator.of(ctx).pushNamed(
       CountryScreen.routeName,
       arguments: {
         'name': item.name,
@@ -26,7 +31,7 @@ class CountryWidget extends StatelessWidget {
         'callingCode': item.callingCodes!.first.toString(),
         'language': getLanguage(),
       },
-    );
+    );*/
   }
 
   String getLanguage() {
@@ -41,12 +46,14 @@ class CountryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final callingCode = sprintf(
-        AppMessages.label_calling_codes, [item.callingCodes!.first.toString()]);
-    final language = sprintf(AppMessages.label_languages, [getLanguage()]);
+    final callingCodes = item.callingCodes!.first.toString();
+    final languages = getLanguage();
+    final callingCode =
+        sprintf(AppMessages.label_calling_codes, [callingCodes]);
+    final language = sprintf(AppMessages.label_languages, [languages]);
 
     return InkWell(
-      onTap: () => selectCategory(context),
+      onTap: () => selectCategory(context, languages, callingCodes),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),

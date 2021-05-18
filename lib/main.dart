@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'models/country.dart';
-import 'providers/countires.dart';
+import 'providers/country_provider.dart';
 import 'screens/country_screen.dart';
 import 'screens/main_screen.dart';
 import 'services/api_service.dart';
@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
-          value: Countries(),
+          value: CountryProvider(),
         ),
       ],
       child: MaterialApp(

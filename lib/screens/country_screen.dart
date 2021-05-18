@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../providers/country_provider.dart';
 import '../utils/app_messages.dart';
 import '../widgets/country_favorite_widget.dart';
 
@@ -15,18 +17,15 @@ class CountryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final country = Provider.of<CountryModel>(context, listen: false);
+    final country = Provider.of<CountryProvider>(context, listen: false);
 
-    final routeArgs =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String?>;
-    final name = routeArgs['name'];
-    final alpha2 = routeArgs['alpha2'];
-    final alpha3 = routeArgs['alpha3'];
-    final flag = routeArgs['flag'];
+    final name = country.item!.name;
+    final alpha2 = country.item!.alpha2Code;
+    final alpha3 = country.item!.alpha3Code;
+    final flag = country.item!.flag;
     final callingCode =
-        sprintf(AppMessages.label_calling_codes, [routeArgs['callingCode']]);
-    final language =
-        sprintf(AppMessages.label_languages, [routeArgs['language']]);
+        sprintf(AppMessages.label_calling_codes, [country.callingCodeStr]);
+    final language = sprintf(AppMessages.label_languages, [country.lanStr]);
     return Scaffold(
       appBar: AppBar(
         title: Text(name!),

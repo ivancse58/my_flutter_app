@@ -1,18 +1,9 @@
-# testapp-flutter
+# My flutter app
 ## My 1st flutter app and fetch data from open api
 -------------------------
 Fetch Sample country list from https://restcountries.eu/rest/v2/all
 and Show all country list into a list view
 -------------------------
-Some flutter command:
-- One time generate code using this command: [https://flutter.dev/docs/development/data-and-backend/json#code-generation]
-> flutter pub run build_runner build
--To create fullter app:
-> flutter pub outdated
-- Create Sample app:
-> flutter create flutter_complete_guide
-- Run app
-> flutter run
 ## Overall app flow:
 ![Alt text](/resources/app_diagram.png?raw=true "App flow")
 ## App widget tree
@@ -32,9 +23,14 @@ Some flutter command:
 | logging           | Log message with data and time prefix | https://pub.dev/packages/logging  |
 | sprintf           | To use for string interpolation or format | https://pub.dev/packages/sprintf |
 | build_runner      | To generate code according to configuration   | https://pub.dev/packages/build_runner  |
-
-## Next Task List
-- [X] 2nd Step: Update UI and show flag, and navigate to new view when click item
-- [X] 3rd Step: Save fav country at cache and filter items
-- [ ] 4th Step: Simple app state management using: flutter provider
-- [ ] 5th Step: Unit test
+### Customized font use:
+ - Roboto Condensed https://fonts.google.com/specimen/Roboto+Condensed
+## Some flutter command:
+- One time generate code using this command: [https://flutter.dev/docs/development/data-and-backend/json#code-generation]
+> flutter pub run build_runner build
+-To create fullter app:
+> flutter pub outdated
+- Create Sample app:
+> flutter create flutter_complete_guide
+- Run app
+> flutter run

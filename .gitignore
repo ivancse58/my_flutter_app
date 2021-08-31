@@ -6,6 +6,11 @@ bin/
 gen/
 out/
 
+.dart_tool
+.dart_tool/*
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
 # Gradle files
 .gradle/
 build/
@@ -31,7 +36,6 @@ proguard/
 .idea/modules.xml
 .idea/dictionaries
 .idea/libraries
-
 # Google Services (e.g. APIs or Firebase)
 #google-services.json
 

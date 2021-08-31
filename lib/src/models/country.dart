@@ -1,7 +1,9 @@
 //@JsonSerializable()
+
 import 'package:hive/hive.dart';
 
 part 'countryHive.g.dart';
+
 part 'countryJson.g.dart';
 
 @HiveType(typeId: 2)

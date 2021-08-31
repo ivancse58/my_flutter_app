@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../models/country.dart';
+import 'package:my_flutter_app/src/models/country.dart';
 
 class CountryProvider with ChangeNotifier {
   CountryModel? item;

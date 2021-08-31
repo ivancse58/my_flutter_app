@@ -40,15 +40,18 @@ dependencies:
   hive_flutter: ^1.0.0
   hive_generator: ^1.1.0
   path_provider: ^2.0.1
-  fluttertoast: ^8.0.6
   provider: ^5.0.0
   logging: ^1.0.1
   sprintf: ^6.0.0
   alice: ^0.2.4
+  dio: ^4.0.0
+  retrofit: any
+  get_it: ^7.2.0
 dev_dependencies:
   # Your other dev_dependencies here
   build_runner: ^2.0.2
   json_serializable: ^4.1.1
+  retrofit_generator: any
 
   flutter_test:
     sdk: flutter

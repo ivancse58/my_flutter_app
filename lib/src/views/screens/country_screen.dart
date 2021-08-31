@@ -3,17 +3,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../utils/app_messages.dart';
 import '../providers/country_provider.dart';
-import '../utils/app_messages.dart';
 import '../widgets/country_favorite_widget.dart';
 
 class CountryScreen extends StatelessWidget {
   static const routeName = '/country-item';
   static const _flagHeight = 250.0;
-
-  /*final CountryModel selectedCountry;
-
-  CountryScreen(this.selectedCountry);*/
 
   @override
   Widget build(BuildContext context) {

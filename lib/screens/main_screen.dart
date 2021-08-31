@@ -1,3 +1,4 @@
+import 'package:alice/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -7,13 +8,19 @@ import '../utils/debug_logger.dart';
 import '../widgets/country_widget.dart';
 
 class MainScreen extends StatefulWidget {
+  final Alice alice;
+
+  MainScreen(this.alice);
+
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _MainScreenState createState() => _MainScreenState(APIService(alice));
 }
 
 class _MainScreenState extends State<MainScreen> {
   final logger = DebugLogger();
-  final APIService apiService = APIService();
+  final APIService apiService;
+
+  _MainScreenState(this.apiService);
 
   Widget buildEmptyWidget(String errorMessage) {
     logger.log(errorMessage);
@@ -45,8 +52,8 @@ class _MainScreenState extends State<MainScreen> {
         child: FutureBuilder(
           future: apiService.fetchCountryWithCache(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
+            if (!snapshot.hasError) {
+              logger.log('No Error, data fetch success!');
               List countryList = apiService.countryList;
               if (countryList.contains(APIService.empty)) {
                 return buildEmptyWidget(AppMessages.emptyMessage);
@@ -73,11 +80,12 @@ class _MainScreenState extends State<MainScreen> {
                     },
                   ),
                 );
-            } else if (snapshot.connectionState != ConnectionState.done ||
-                snapshot.hasError) {
+            } else if (snapshot.hasError) {
+              logger.log('Has Error!');
               return buildEmptyWidget(AppMessages.errorMessage);
             }
             // By default, show a loading spinner.
+            logger.log('By default, show a loading spinner.!');
             return CircularProgressIndicator();
           },
         ),

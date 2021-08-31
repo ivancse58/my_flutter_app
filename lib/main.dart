@@ -1,3 +1,4 @@
+import 'package:alice/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -38,6 +39,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+  Alice _alice = Alice(
+      showNotification: true,
+      showInspectorOnShake: true,
+      darkTheme: false,
+      maxCallsCount: 1000);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -47,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
       child: MaterialApp(
+        navigatorKey: _alice.getNavigatorKey(),
         title: 'Fetch Data Example',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -84,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         initialRoute: '/',
         // default is '/'
         routes: {
-          '/': (ctx) => MainScreen(),
+          '/': (ctx) => MainScreen(_alice),
           CountryScreen.routeName: (ctx) => CountryScreen(),
         },
         onGenerateRoute: (settings) {
@@ -92,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         onUnknownRoute: (settings) {
           return MaterialPageRoute(
-            builder: (ctx) => MainScreen(),
+            builder: (ctx) => MainScreen(_alice),
           );
         },
       ),

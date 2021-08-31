@@ -6,7 +6,8 @@ class AppMessages {
   static const updateSuccessMessage = 'Update data successfully';
   static const updateErrorMessage = 'Unable to Update data!!!';
 
-  static const label_languages = 'Languages: %s' ;
+  static const label_languages = 'Languages: %s';
+
   static const label_calling_codes = 'Calling Codes: %s';
 
   static AppMessages? _instance;

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:alice/alice.dart';
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,17 +18,22 @@ class APIService {
   static const _status_code_200 = 200;
 
   late Box _box;
+  final Alice alice;
   List countryList = [];
+
+  APIService(this.alice);
 
   // GET https://restcountries.eu/rest/v2/all
   Future<bool> fetchCountryWithCache() async {
-    //await Future.delayed(Duration(seconds: 5));
-
-    logger.log('fetchCountry');
+    final delay = await Future.delayed(Duration(seconds: 20));
+    logger.log(delay);
+    logger.log('fetchCountryWithCache');
     _box = await Hive.openBox(boxName);
     logger.log('open box');
+
     try {
       final response = await http.get(Uri.https(baseUrl, path));
+      alice.onHttpResponse(response);
       logger.log('statusCode = ${response.statusCode}');
       if (response.statusCode == _status_code_200) {
         final data = parseCountries(response.body);
@@ -34,6 +41,7 @@ class APIService {
 
         await saveDataIntoHive(data);
       } else {
+        logger.log('Unable to load data!');
         throw Exception('Unable to load data!');
       }
     } catch (e) {
@@ -47,6 +55,7 @@ class APIService {
     } else {
       countryList = myMap;
     }
+    logger.log('fetchCountryWithCache Data loaded!');
 
     return Future.value(true);
   }
@@ -55,6 +64,7 @@ class APIService {
     logger.log('updateData');
     try {
       final response = await http.get(Uri.https(baseUrl, path));
+      alice.onHttpResponse(response);
       if (response.statusCode == _status_code_200) {
         final data = parseCountries(response.body);
         logger.log('Saving data into hive');

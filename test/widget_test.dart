@@ -11,8 +11,12 @@ import 'package:my_flutter_app/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    const testKey = Key('K');
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyHomePage());
+    await tester.pumpWidget(MyHomePage(
+      key: testKey,
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

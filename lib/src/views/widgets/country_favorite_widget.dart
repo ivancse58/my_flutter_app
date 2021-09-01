@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
 import 'package:my_flutter_app/src/domain/usecase/get_fav_country_usecase.dart';
 import 'package:my_flutter_app/src/domain/usecase/set_fav_country_usecase.dart';
@@ -9,16 +7,14 @@ import 'package:my_flutter_app/src/utils/debug_logger.dart';
 import '../../injector.dart';
 
 class CountryFavoriteWidget extends StatefulWidget {
-  final logger = DebugLogger();
-  static const boxName = 'CountryFavorite';
-  final String? alpha2Code;
-  final String? alpha3Code;
+  final FavKey favKey;
+  final bool isGrid;
 
-  CountryFavoriteWidget(this.alpha2Code, this.alpha3Code);
+  CountryFavoriteWidget(this.favKey, [this.isGrid = false]);
 
   @override
   _CountryFavoriteWidgetState createState() =>
-      _CountryFavoriteWidgetState(alpha2Code, alpha3Code);
+      _CountryFavoriteWidgetState(favKey);
 }
 
 class _CountryFavoriteWidgetState extends State<CountryFavoriteWidget> {
@@ -26,36 +22,39 @@ class _CountryFavoriteWidgetState extends State<CountryFavoriteWidget> {
       injector<SetFavCountryUseCase>();
   final GetFavCountryUseCase _getFavCountryUseCase =
       injector<GetFavCountryUseCase>();
+  final _logger = DebugLogger();
 
-  bool _isFav = false;
+  //bool _isFav = false;
+  final ValueNotifier<bool> _isFav = ValueNotifier<bool>(false);
 
-  _CountryFavoriteWidgetState(String? a, String? b) {
-    _getFavCountryUseCase.call(params: FavKey(a, b)).then((val) => setState(() {
-          _isFav = val;
+  _CountryFavoriteWidgetState(FavKey favKey) {
+    _getFavCountryUseCase.call(params: favKey).then((val) => setState(() {
+          _isFav.value = val;
         }));
-  }
-
-  void _setFav() {
-    _setFavCountryUseCase
-        .call(params: FavKey(widget.alpha2Code, widget.alpha3Code))
-        .then((val) => setState(() {
-              _isFav = val;
-            }));
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ValueListenableBuilder(
-        valueListenable: Hive.box(CountryFavoriteWidget.boxName).listenable(),
-        builder: (context, box, widgetD) {
-          final icon = _isFav ? Icons.star : Icons.star_border;
+      child: ValueListenableBuilder<bool>(
+        builder: (BuildContext context, bool value, Widget? child) {
+          final icon = value ? Icons.star : Icons.star_border;
           return IconButton(
               icon: Icon(icon),
               color: Theme.of(context).errorColor,
               onPressed: () => _setFav());
         },
+        valueListenable: _isFav,
       ),
     );
+  }
+
+  void _setFav() {
+    _logger.log("setFav: ${widget.favKey}");
+    _setFavCountryUseCase
+        .call(params: widget.favKey)
+        .then((val) => setState(() {
+              _isFav.value = val;
+            }));
   }
 }

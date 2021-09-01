@@ -1,3 +1,4 @@
+import 'package:alice/alice.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -15,7 +16,10 @@ import 'models/country.dart';
 
 final injector = GetIt.asNewInstance();
 
-Future<void> initializeDependencies(Function(String) openBox) async {
+Future<void> initializeDependencies(
+  Function(String) openBox,
+  Alice alice,
+) async {
   Hive.registerAdapter(CountryModelAdapter());
   Hive.registerAdapter(LanguageModelAdapter());
   Hive.registerAdapter(CurrencyModelAdapter());
@@ -25,7 +29,10 @@ Future<void> initializeDependencies(Function(String) openBox) async {
   // Dio client
   injector.registerSingleton<Dio>(Dio());
   // Service
-  injector.registerSingleton<CountryApiService>(CountryApiService(injector()));
+  injector.registerSingleton<CountryApiService>(CountryApiService(
+    injector(),
+    alice,
+  ));
 
   // Repository
   injector

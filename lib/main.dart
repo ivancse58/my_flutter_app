@@ -1,3 +1,4 @@
+import 'package:alice/alice.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,10 +9,16 @@ import 'package:my_flutter_app/src/views/providers/country_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+Alice alice = Alice(
+    showNotification: true,
+    showInspectorOnShake: true,
+    darkTheme: false,
+    maxCallsCount: 1000);
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initializeDependencies(openBox);
+  await initializeDependencies(openBox, alice);
   runApp(MyHomePage(key: GlobalKey()));
 }
 
@@ -31,12 +38,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
 
-  /*Alice _alice = Alice(
-      showNotification: true,
-      showInspectorOnShake: true,
-      darkTheme: false,
-      maxCallsCount: 1000);*/
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
       child: MaterialApp(
-        //navigatorKey: _alice.getNavigatorKey(),
+        navigatorKey: alice.getNavigatorKey(),
         title: 'Fetch Data Example',
         theme: AppTheme.light,
         initialRoute: '/',

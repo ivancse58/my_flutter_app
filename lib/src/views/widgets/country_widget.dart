@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
 import 'package:my_flutter_app/src/models/country.dart';
 import 'package:my_flutter_app/src/utils/app_messages.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,9 @@ class CountryWidget extends StatelessWidget {
   static const _flagHeight = 250.0;
 
   final CountryModel item;
+  final Function(CountryModel) getLanguage;
 
-  CountryWidget(this.item);
+  CountryWidget(this.item, this.getLanguage);
 
   void selectCountry(BuildContext ctx, String lanStr, String callingCodeStr) {
     Provider.of<CountryProvider>(ctx, listen: false)
@@ -23,7 +25,7 @@ class CountryWidget extends StatelessWidget {
     Navigator.of(ctx).pushNamed(CountryScreen.routeName);
   }
 
-  String getLanguage() {
+  /*String _getLanguage() {
     var languages = StringBuffer();
     final items = item.languages!.map((e) => e.name).toList();
     for (int i = 0; i < items.length; i++) {
@@ -31,12 +33,12 @@ class CountryWidget extends StatelessWidget {
       if (i + 1 < items.length) languages.write(', ');
     }
     return languages.toString();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
     final callingCodes = item.callingCodes!.first.toString();
-    final languages = getLanguage();
+    final languages = getLanguage(item);
     final callingCode =
         sprintf(AppMessages.label_calling_codes, [callingCodes]);
     final language = sprintf(AppMessages.label_languages, [languages]);
@@ -97,9 +99,10 @@ class CountryWidget extends StatelessWidget {
                       children: [
                         Text(
                           language,
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
-                        CountryFavoriteWidget(item.alpha2Code, item.alpha3Code),
+                        CountryFavoriteWidget(
+                            FavKey(item.alpha2Code, item.alpha3Code)),
                       ],
                     ),
                   ),

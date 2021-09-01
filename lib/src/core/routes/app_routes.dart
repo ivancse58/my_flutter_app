@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/src/views/screens/country_screen.dart';
 import 'package:my_flutter_app/src/views/screens/main_screen.dart';
-// code copy from : https://github.com/devmuaz/flutter_clean_architecture under MIT License
+/*
+  code copy from :
+  https://github.com/devmuaz/flutter_clean_architecture
+  under MIT License
+*/
 
 class AppRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {

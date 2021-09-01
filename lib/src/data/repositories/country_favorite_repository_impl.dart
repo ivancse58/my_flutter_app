@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import 'package:my_flutter_app/src/domain/repositories/country_favorite_repository.dart';
-import 'package:my_flutter_app/src/utils/debug_logger.dart';
 
 class CountryFavoriteRepositoryImpl extends CountryFavoriteRepository {
   static const boxName = 'CountryFavorite';

@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
-// code copy from : https://github.com/devmuaz/flutter_clean_architecture under MIT License
-
+/*
+  code copy from :
+  https://github.com/devmuaz/flutter_clean_architecture
+  under MIT License
+*/
 abstract class DataState<T> {
   final T? data;
   final DioError? error;

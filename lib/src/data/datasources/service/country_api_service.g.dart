@@ -7,10 +7,11 @@ part of 'country_api_service.dart';
 // **************************************************************************
 
 class _CountryApiService implements CountryApiService {
-  _CountryApiService(this._dio, {this.baseUrl}) {
+  _CountryApiService(this._dio, this._alice, {this.baseUrl}) {
     baseUrl ??= 'https://restcountries.eu';
   }
 
+  final Alice _alice;
   final Dio _dio;
   String? baseUrl;
 
@@ -19,6 +20,7 @@ class _CountryApiService implements CountryApiService {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
+    _dio.interceptors.add(_alice.getDioInterceptor());
     final _result = await _dio.fetch<List<dynamic>>(
         _setStreamType<HttpResponse<List<CountryModel>>>(
             Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)

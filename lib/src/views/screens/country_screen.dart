@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
 import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -86,7 +87,7 @@ class CountryScreen extends StatelessWidget {
                                 language,
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
-                              CountryFavoriteWidget(alpha2, alpha3),
+                              CountryFavoriteWidget(FavKey(alpha2, alpha3)),
                             ],
                           ),
                         ),

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/src/core/resources/data_state.dart';
+import 'package:my_flutter_app/src/core/utils/app_messages.dart';
+import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
 import 'package:my_flutter_app/src/domain/usecase/get_countries_usecase.dart';
 import 'package:my_flutter_app/src/domain/usecase/get_saved_countries_usecase.dart';
 import 'package:my_flutter_app/src/models/country.dart';
-import 'package:my_flutter_app/src/utils/app_messages.dart';
-import 'package:my_flutter_app/src/utils/debug_logger.dart';
 
 import '../../injector.dart';
 import 'grid_widget.dart';
 
 class MainScreen extends StatefulWidget {
-  //final Alice alice;
-
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -22,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final GetSavedCountriesUseCase _getSavedCountriesUseCase =
       injector<GetSavedCountriesUseCase>();
   final AppBar _appBar = AppBar(
-    title: Text('Fetch All Countries'),
+    title: Text(AppMessages.appName),
   );
 
   @override
@@ -108,7 +106,7 @@ class _MainScreenState extends State<MainScreen> {
         return dataState.data;
       }
       if (dataState is DataFailed) {
-        throw Exception('Unable to load data!');
+        throw Exception(AppMessages.errorMessage);
       }
     }
     return cacheItems;

@@ -1,50 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:my_flutter_app/src/core/utils/app_messages.dart';
+import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
 import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
 import 'package:my_flutter_app/src/models/country.dart';
-import 'package:my_flutter_app/src/utils/app_messages.dart';
-import 'package:provider/provider.dart';
+import 'package:my_flutter_app/src/views/widgets/svg_widget.dart';
 import 'package:sprintf/sprintf.dart';
 
-import '../providers/country_provider.dart';
-import '../screens/country_screen.dart';
 import 'country_favorite_widget.dart';
 
-class CountryWidget extends StatelessWidget {
+class CountryWidget extends StatefulWidget {
   static const _flagHeight = 250.0;
 
-  final CountryModel item;
-  final Function(CountryModel) getLanguage;
+  final CountryModel _countryModel;
+  final String _languages;
+  final Function _navigateCountryScreen;
 
-  CountryWidget(this.item, this.getLanguage);
+  CountryWidget(
+    this._countryModel,
+    this._languages,
+    this._navigateCountryScreen,
+  );
 
-  void selectCountry(BuildContext ctx, String lanStr, String callingCodeStr) {
-    Provider.of<CountryProvider>(ctx, listen: false)
-        .setCountry(item, lanStr, callingCodeStr);
-    Navigator.of(ctx).pushNamed(CountryScreen.routeName);
-  }
+  @override
+  _CountryWidgetState createState() => _CountryWidgetState();
+}
 
-  /*String _getLanguage() {
-    var languages = StringBuffer();
-    final items = item.languages!.map((e) => e.name).toList();
-    for (int i = 0; i < items.length; i++) {
-      languages.write(items[i]);
-      if (i + 1 < items.length) languages.write(', ');
-    }
-    return languages.toString();
-  }*/
+class _CountryWidgetState extends State<CountryWidget> {
+  final _logger = DebugLogger();
 
   @override
   Widget build(BuildContext context) {
-    final callingCodes = item.callingCodes!.first.toString();
-    final languages = getLanguage(item);
-    final callingCode =
-        sprintf(AppMessages.label_calling_codes, [callingCodes]);
-    final language = sprintf(AppMessages.label_languages, [languages]);
+    final callingCode = sprintf(AppMessages.label_calling_codes,
+        [widget._countryModel.callingCodes!.first.toString()]);
+    final language = sprintf(AppMessages.label_languages, [widget._languages]);
+    final favKey = FavKey(
+        widget._countryModel.alpha2Code, widget._countryModel.alpha3Code);
 
+    _logger.log('_CountryWidgetState data loaded!!');
     return InkWell(
-      onTap: () => selectCountry(context, languages, callingCodes),
+      onTap: () => widget._navigateCountryScreen(),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -59,18 +54,8 @@ class CountryWidget extends StatelessWidget {
                 children: <Widget>[
                   ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
-                    child: SvgPicture.network(
-                      item.flag!,
-                      height: _flagHeight,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholderBuilder: (BuildContext ctx) => Container(
-                        height: _flagHeight,
-                        width: double.infinity,
-                        child: const Center(child: CircularProgressIndicator()),
-                      ),
-                      cacheColorFilter: true,
-                    ),
+                    child: SvgWidget(
+                        widget._countryModel.flag!, CountryWidget._flagHeight),
                   ),
                 ],
               ),
@@ -83,7 +68,7 @@ class CountryWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        item.name!,
+                        widget._countryModel.name!,
                         style: Theme.of(context).textTheme.headline2,
                       ),
                       Text(
@@ -101,8 +86,7 @@ class CountryWidget extends StatelessWidget {
                           language,
                           style: Theme.of(context).textTheme.headline6,
                         ),
-                        CountryFavoriteWidget(
-                            FavKey(item.alpha2Code, item.alpha3Code)),
+                        CountryFavoriteWidget(favKey),
                       ],
                     ),
                   ),

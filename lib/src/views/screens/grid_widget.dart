@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/src/models/country.dart';
+import 'package:my_flutter_app/src/views/providers/country_provider.dart';
 import 'package:my_flutter_app/src/views/widgets/country_grid_widget.dart';
 import 'package:my_flutter_app/src/views/widgets/country_widget.dart';
+import 'package:provider/provider.dart';
+
+import 'country_screen.dart';
 
 class GridWidget extends StatefulWidget {
   final List<CountryModel> countryList;
@@ -11,7 +15,7 @@ class GridWidget extends StatefulWidget {
   GridViewState createState() => GridViewState(countryList);
 }
 
-class GridViewState extends State {
+class GridViewState extends State<GridWidget> {
   final List<CountryModel> countryList;
   bool _isGrid = false;
   double _childAspectRatio = 0.95;
@@ -99,14 +103,28 @@ class GridViewState extends State {
               childAspectRatio: _childAspectRatio,
               children: countryList.map((data) {
                 return _isGrid
-                    ? CountryGridWidget(data, _getLanguage)
-                    : CountryWidget(data, _getLanguage);
+                    ? CountryGridWidget(
+                        data,
+                        _getLanguage(data),
+                        () => {_navigateCountryScreen(context, data)},
+                      )
+                    : CountryWidget(
+                        data,
+                        _getLanguage(data),
+                        () => {_navigateCountryScreen(context, data)},
+                      );
               }).toList(),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _navigateCountryScreen(BuildContext ctx, CountryModel item) {
+    Provider.of<CountryProvider>(ctx, listen: false)
+        .setCountry(item, _getLanguage);
+    Navigator.of(ctx).pushNamed(CountryScreen.routeName);
   }
 
   String _getLanguage(CountryModel item) {

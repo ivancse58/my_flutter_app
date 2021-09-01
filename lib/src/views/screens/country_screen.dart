@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
+import 'package:my_flutter_app/src/views/providers/fav_provider.dart';
+import 'package:my_flutter_app/src/views/widgets/svg_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:sprintf/sprintf.dart';
 
-import '../../utils/app_messages.dart';
 import '../providers/country_provider.dart';
 import '../widgets/country_favorite_widget.dart';
 
@@ -14,15 +12,17 @@ class CountryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final country = Provider.of<CountryProvider>(context, listen: false);
+    final countryProvider =
+        Provider.of<CountryProvider>(context, listen: false);
+    final name = countryProvider.item?.name;
+    final favKey = countryProvider.favKey;
+    final flag = countryProvider.item?.flag;
+    final callingCode = countryProvider.callingCode;
+    final language = countryProvider.language;
 
-    final name = country.item!.name;
-    final alpha2 = country.item!.alpha2Code;
-    final alpha3 = country.item!.alpha3Code;
-    final flag = country.item!.flag;
-    final callingCode =
-        sprintf(AppMessages.label_calling_codes, [country.callingCodeStr]);
-    final language = sprintf(AppMessages.label_languages, [country.lanStr]);
+    Provider.of<CountryFavProvider>(context, listen: false)
+        .setInitFavoriteStatus(favKey!, false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(name!),
@@ -44,19 +44,7 @@ class CountryScreen extends StatelessWidget {
                       children: <Widget>[
                         ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
-                          child: SvgPicture.network(
-                            flag!,
-                            height: _flagHeight,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            placeholderBuilder: (BuildContext ctx) => Container(
-                              height: _flagHeight,
-                              width: double.infinity,
-                              child: const Center(
-                                  child: CircularProgressIndicator()),
-                            ),
-                            cacheColorFilter: true,
-                          ),
+                          child: SvgWidget(flag!, _flagHeight),
                         ),
                       ],
                     ),
@@ -73,7 +61,7 @@ class CountryScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.headline2,
                             ),
                             Text(
-                              callingCode,
+                              callingCode!,
                               style: Theme.of(context).textTheme.headline6,
                             ),
                           ],
@@ -84,10 +72,10 @@ class CountryScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                language,
-                                style: Theme.of(context).textTheme.subtitle2,
+                                language!,
+                                style: Theme.of(context).textTheme.headline6,
                               ),
-                              CountryFavoriteWidget(FavKey(alpha2, alpha3)),
+                              CountryFavoriteWidget(favKey),
                             ],
                           ),
                         ),

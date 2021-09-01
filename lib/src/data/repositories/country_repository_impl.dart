@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 import 'package:my_flutter_app/src/core/resources/data_state.dart';
-import 'package:my_flutter_app/src/data/datasources/service/country_api_service.dart';
+import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
+import 'package:my_flutter_app/src/data/services/country_api_service.dart';
 import 'package:my_flutter_app/src/domain/repositories/country_repository.dart';
 import 'package:my_flutter_app/src/models/country.dart';
-import 'package:my_flutter_app/src/utils/debug_logger.dart';
 
 class CountryRepositoryImpl extends CountryRepository {
   static const boxName = 'CountryData';
@@ -22,9 +22,7 @@ class CountryRepositoryImpl extends CountryRepository {
     _logger.log('CountryRepositoryImpl getCountryList');
     _box = await Hive.openBox(boxName);
     try {
-      _logger.log('CountryRepositoryImpl try1');
       final httpResponse = await _countryApiService.getCountryList();
-      _logger.log('CountryRepositoryImpl api getCountryList');
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         final data = httpResponse.data;
@@ -57,6 +55,7 @@ class CountryRepositoryImpl extends CountryRepository {
 
   @override
   Future<List<CountryModel>> getSavedCountryList() async {
+    _logger.log('CountryRepositoryImpl getSavedCountryList');
     _box = await Hive.openBox(boxName);
     return _box.values.map((country) => country as CountryModel).toList();
   }
@@ -66,6 +65,6 @@ class CountryRepositoryImpl extends CountryRepository {
     for (var d in data) {
       _box.add(d);
     }
-    _logger.log('save data into hive done');
+    _logger.log('CountryRepositoryImpl _saveDataIntoHive done');
   }
 }

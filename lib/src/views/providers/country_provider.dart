@@ -18,8 +18,8 @@ class CountryProvider with ChangeNotifier {
     this.lanStr = getLanguage(value);
     this.callingCodeStr = value.callingCodes!.first.toString();
     this.callingCode =
-        sprintf(AppMessages.label_calling_codes, [this.callingCodeStr]);
-    this.language = sprintf(AppMessages.label_languages, [this.lanStr]);
+        sprintf(AppMessages.labelCallingCodes, [this.callingCodeStr]);
+    this.language = sprintf(AppMessages.labelLanguages, [this.lanStr]);
     //notifyListeners();
   }
 }

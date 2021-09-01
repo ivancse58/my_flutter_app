@@ -7,7 +7,7 @@ import 'package:my_flutter_app/src/domain/usecase/get_saved_countries_usecase.da
 import 'package:my_flutter_app/src/models/country.dart';
 
 import '../../injector.dart';
-import 'grid_widget.dart';
+import '../widgets/grid_widget.dart';
 
 class MainScreen extends StatefulWidget {
   @override

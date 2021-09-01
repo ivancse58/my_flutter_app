@@ -23,6 +23,12 @@ class _CountryFavoriteWidgetState extends State<CountryFavoriteWidget> {
 
   final ValueNotifier<bool> _isFav = ValueNotifier<bool>(false);
 
+  @override
+  void initState() {
+    _logger.log('_CountryFavoriteWidgetState initState');
+    super.initState();
+  }
+
   _CountryFavoriteWidgetState(FavKey favKey) {
     _logger.log('_CountryFavoriteWidgetState enter');
     _getFavCountry.call(params: favKey).then(

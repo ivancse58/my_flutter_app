@@ -31,11 +31,13 @@ class _CountryWidgetState extends State<CountryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final callingCode = sprintf(AppMessages.label_calling_codes,
+    final callingCode = sprintf(AppMessages.labelCallingCodes,
         [widget._countryModel.callingCodes!.first.toString()]);
-    final language = sprintf(AppMessages.label_languages, [widget._languages]);
+    final language = sprintf(AppMessages.labelLanguages, [widget._languages]);
     final favKey = FavKey(
-        widget._countryModel.alpha2Code, widget._countryModel.alpha3Code);
+      widget._countryModel.alpha2Code,
+      widget._countryModel.alpha3Code,
+    );
 
     _logger.log('_CountryWidgetState data loaded!!');
     return InkWell(

@@ -5,7 +5,8 @@ import 'package:my_flutter_app/src/views/widgets/country_grid_widget.dart';
 import 'package:my_flutter_app/src/views/widgets/country_widget.dart';
 import 'package:provider/provider.dart';
 
-import 'country_screen.dart';
+import '../screens/country_screen.dart';
+import 'data_tab_widget.dart';
 
 class GridWidget extends StatefulWidget {
   final List<CountryModel> countryList;
@@ -62,60 +63,32 @@ class GridViewState extends State<GridWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final gridView = GridView.count(
+      crossAxisCount: 2,
+      childAspectRatio: 0.75,
+      children: countryList.map((data) {
+        return CountryGridWidget(
+          data,
+          _getLanguage(data),
+          () => {_navigateCountryScreen(context, data)},
+        );
+      }).toList(),
+    );
+    final listView = GridView.count(
+      crossAxisCount: 1,
+      childAspectRatio: 0.95,
+      children: countryList.map((data) {
+        return CountryWidget(
+          data,
+          _getLanguage(data),
+          () => {_navigateCountryScreen(context, data)},
+        );
+      }).toList(),
+    );
     return Scaffold(
       body: Column(
         children: [
-          Container(
-              margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  OutlinedButton.icon(
-                    icon: Icon(
-                      Icons.view_list,
-                      color: _getSelectedColor(!_isGrid),
-                    ),
-                    label: Text(
-                      "List View",
-                      style: TextStyle(color: _getSelectedColor(!_isGrid)),
-                    ),
-                    onPressed: () => _changeMode(),
-                    style: _getSelectedBtnStyle(!_isGrid),
-                  ),
-                  SizedBox(width: 4),
-                  OutlinedButton.icon(
-                    icon: Icon(
-                      Icons.grid_4x4,
-                      color: _getSelectedColor(_isGrid),
-                    ),
-                    label: Text(
-                      "Grid View",
-                      style: TextStyle(color: _getSelectedColor(_isGrid)),
-                    ),
-                    onPressed: () => _changeMode(),
-                    style: _getSelectedBtnStyle(_isGrid),
-                  )
-                ],
-              )),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: _isGrid ? 2 : 1,
-              childAspectRatio: _childAspectRatio,
-              children: countryList.map((data) {
-                return _isGrid
-                    ? CountryGridWidget(
-                        data,
-                        _getLanguage(data),
-                        () => {_navigateCountryScreen(context, data)},
-                      )
-                    : CountryWidget(
-                        data,
-                        _getLanguage(data),
-                        () => {_navigateCountryScreen(context, data)},
-                      );
-              }).toList(),
-            ),
-          ),
+          Expanded(child: DataTabWidget(listView, gridView)),
         ],
       ),
     );

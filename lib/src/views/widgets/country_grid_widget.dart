@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/src/core/utils/app_messages.dart';
+import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
 import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
+import 'package:my_flutter_app/src/domain/usecase/get_fav_country_usecase.dart';
 import 'package:my_flutter_app/src/models/country.dart';
 import 'package:my_flutter_app/src/views/widgets/svg_widget.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../../injector.dart';
 import 'country_favorite_widget.dart';
 
 class CountryGridWidget extends StatefulWidget {
@@ -26,15 +29,22 @@ class CountryGridWidget extends StatefulWidget {
 }
 
 class _CountryGridWidgetState extends State<CountryGridWidget> {
+  final _logger = DebugLogger();
+  final ValueNotifier<bool> _isFav = ValueNotifier<bool>(false);
+  final GetFavCountryUseCase _getFavCountry = injector<GetFavCountryUseCase>();
+
   @override
   Widget build(BuildContext context) {
-    final callingCode = sprintf(AppMessages.labelCallingCodes,
-        [widget._countryModel.callingCodes!.first.toString()]);
-    final language = sprintf(AppMessages.labelLanguages, [widget._languages]);
     final favKey = FavKey(
       widget._countryModel.alpha2Code,
       widget._countryModel.alpha3Code,
     );
+    final callingCode = sprintf(AppMessages.labelCallingCodes,
+        [widget._countryModel.callingCodes!.first.toString()]);
+    final language = sprintf(AppMessages.labelLanguages, [widget._languages]);
+
+    // this is creating loop!
+    _getFav(favKey);
 
     return InkWell(
       onTap: () => widget._navigateCountryScreen(),
@@ -75,7 +85,20 @@ class _CountryGridWidgetState extends State<CountryGridWidget> {
                   ),
                   Expanded(
                     flex: 3,
-                    child: CountryFavoriteWidget(favKey),
+                    child: ValueListenableBuilder<bool>(
+                      builder: (
+                        BuildContext context,
+                        bool value,
+                        Widget? child,
+                      ) {
+                        return CountryFavoriteWidget(
+                          value,
+                          favKey,
+                          _updateFavState,
+                        );
+                      },
+                      valueListenable: _isFav,
+                    ),
                   ),
                 ],
               ),
@@ -84,6 +107,14 @@ class _CountryGridWidgetState extends State<CountryGridWidget> {
         ),
       ),
     );
+  }
+
+  void _updateFavState(bool isFav) {
+    _logger.log('CountryGrid _updateFavState $isFav');
+    if (mounted)
+      setState(() {
+        _isFav.value = isFav;
+      });
   }
 
   Widget _getFlagView() {
@@ -109,5 +140,11 @@ class _CountryGridWidgetState extends State<CountryGridWidget> {
         style: textStyle,
       ),
     );
+  }
+
+  void _getFav(FavKey favKey) {
+    _getFavCountry.call(params: favKey).then(
+          (val) => {_updateFavState(val)},
+        );
   }
 }

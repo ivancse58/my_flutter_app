@@ -6,7 +6,6 @@ import 'package:my_flutter_app/src/core/routes/app_routes.dart';
 import 'package:my_flutter_app/src/core/themes/app_theme.dart';
 import 'package:my_flutter_app/src/injector.dart';
 import 'package:my_flutter_app/src/views/providers/country_provider.dart';
-import 'package:my_flutter_app/src/views/providers/fav_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -45,9 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
       providers: [
         ChangeNotifierProvider.value(
           value: CountryProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value: CountryFavProvider(),
         ),
       ],
       child: MaterialApp(

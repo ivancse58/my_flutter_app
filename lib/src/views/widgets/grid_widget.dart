@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_app/src/models/country.dart';
 import 'package:my_flutter_app/src/views/providers/country_provider.dart';
 import 'package:my_flutter_app/src/views/widgets/country_grid_widget.dart';
-import 'package:my_flutter_app/src/views/widgets/country_widget.dart';
+import 'package:my_flutter_app/src/views/widgets/country_list_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../screens/country_screen.dart';
@@ -78,7 +78,7 @@ class GridViewState extends State<GridWidget> {
       crossAxisCount: 1,
       childAspectRatio: 0.95,
       children: countryList.map((data) {
-        return CountryWidget(
+        return CountryListWidget(
           data,
           _getLanguage(data),
           () => {_navigateCountryScreen(context, data)},
@@ -97,6 +97,7 @@ class GridViewState extends State<GridWidget> {
   void _navigateCountryScreen(BuildContext ctx, CountryModel item) {
     Provider.of<CountryProvider>(ctx, listen: false)
         .setCountry(item, _getLanguage);
+
     Navigator.of(ctx).pushNamed(CountryScreen.routeName);
   }
 

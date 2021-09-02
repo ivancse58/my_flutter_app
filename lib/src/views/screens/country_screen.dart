@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter_app/src/views/providers/fav_provider.dart';
+import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
+import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
+import 'package:my_flutter_app/src/domain/usecase/get_fav_country_usecase.dart';
 import 'package:my_flutter_app/src/views/widgets/svg_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../injector.dart';
 import '../providers/country_provider.dart';
 import '../widgets/country_favorite_widget.dart';
 
-class CountryScreen extends StatelessWidget {
+class CountryScreen extends StatefulWidget {
   static const routeName = '/country-item';
   static const _flagHeight = 250.0;
+
+  @override
+  _CountryScreenState createState() => _CountryScreenState();
+}
+
+class _CountryScreenState extends State<CountryScreen> {
+  final _logger = DebugLogger();
+  final ValueNotifier<bool> _isFav = ValueNotifier<bool>(false);
+  final GetFavCountryUseCase _getFavCountry = injector<GetFavCountryUseCase>();
+  bool _dataLoaded = false;
 
   @override
   Widget build(BuildContext context) {
     final countryProvider =
         Provider.of<CountryProvider>(context, listen: false);
     final name = countryProvider.item?.name;
-    final favKey = countryProvider.favKey;
     final flag = countryProvider.item?.flag;
     final callingCode = countryProvider.callingCode;
     final language = countryProvider.language;
-
-    Provider.of<CountryFavProvider>(context, listen: false)
-        .setInitFavoriteStatus(favKey!, false);
+    final favKey = FavKey(
+      countryProvider.item?.alpha2Code,
+      countryProvider.item?.alpha3Code,
+    );
+    // this is creating loop!
+    if (!_dataLoaded) _getFav(favKey);
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +59,7 @@ class CountryScreen extends StatelessWidget {
                       children: <Widget>[
                         ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(15)),
-                          child: SvgWidget(flag!, _flagHeight),
+                          child: SvgWidget(flag!, CountryScreen._flagHeight),
                         ),
                       ],
                     ),
@@ -75,7 +90,20 @@ class CountryScreen extends StatelessWidget {
                                 language!,
                                 style: Theme.of(context).textTheme.headline6,
                               ),
-                              CountryFavoriteWidget(favKey),
+                              ValueListenableBuilder<bool>(
+                                builder: (
+                                  BuildContext context,
+                                  bool value,
+                                  Widget? child,
+                                ) {
+                                  return CountryFavoriteWidget(
+                                    value,
+                                    favKey,
+                                    _updateFavState,
+                                  );
+                                },
+                                valueListenable: _isFav,
+                              ),
                             ],
                           ),
                         ),
@@ -89,5 +117,24 @@ class CountryScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _updateFavState(bool isFav) {
+    _logger.log('CountryScreen _updateFavState $isFav');
+    if (mounted)
+      setState(() {
+        _isFav.value = isFav;
+      });
+  }
+
+  void _getFav(FavKey favKey) {
+    _logger.log('CountryScreen _getFav');
+
+    _dataLoaded = true;
+    _getFavCountry.call(params: favKey).then(
+          (val) => setState(() {
+            _isFav.value = val;
+          }),
+        );
   }
 }

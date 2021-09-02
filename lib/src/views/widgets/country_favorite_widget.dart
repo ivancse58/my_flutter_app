@@ -1,37 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
+import 'package:my_flutter_app/src/domain/usecase/get_fav_country_usecase.dart';
 import 'package:my_flutter_app/src/domain/usecase/set_fav_country_usecase.dart';
 
 import '../../injector.dart';
 
-class CountryFavoriteWidget extends StatelessWidget {
+class CountryFavoriteWidget extends StatefulWidget {
+  final FavKey _favKey;
+
+  CountryFavoriteWidget(this._favKey);
+
+  @override
+  _CountryFavoriteWidgetState createState() => _CountryFavoriteWidgetState();
+}
+
+class _CountryFavoriteWidgetState extends State<CountryFavoriteWidget> {
   final SetFavCountryUseCase _setFavCountry = injector<SetFavCountryUseCase>();
 
-  final Function _updateState;
-  final FavKey _favKey;
-  final bool _isFav;
+  final GetFavCountryUseCase _getFavCountry = injector<GetFavCountryUseCase>();
+  final ValueNotifier<bool> _isFav = ValueNotifier<bool>(false);
 
-  CountryFavoriteWidget(
-    this._isFav,
-    this._favKey,
-    this._updateState,
-  );
+  @override
+  void initState() {
+    _getFav(widget._favKey);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final icon = _isFav ? Icons.star : Icons.star_border;
-
     return Center(
-      child: IconButton(
-          icon: Icon(icon),
-          color: Theme.of(context).errorColor,
-          onPressed: () => _setFav(_favKey)),
+      child: ValueListenableBuilder<bool>(
+        builder: (BuildContext context, bool value, Widget? child) {
+          final icon = value ? Icons.star : Icons.star_border;
+          return IconButton(
+              icon: Icon(icon), color: Theme.of(context).errorColor, onPressed: () => _setFav());
+        },
+        valueListenable: _isFav,
+      ),
     );
   }
 
-  void _setFav(FavKey favKey) {
-    _setFavCountry.call(params: favKey).then(
-          (val) => {_updateState(val)},
+  void _setFav() {
+    _setFavCountry.call(params: widget._favKey).then(
+          (val) => setState(() {
+            _isFav.value = val;
+          }),
+        );
+  }
+
+  void _getFav(FavKey favKey) {
+    _getFavCountry.call(params: favKey).then(
+          (val) => setState(() {
+            _isFav.value = val;
+          }),
         );
   }
 }

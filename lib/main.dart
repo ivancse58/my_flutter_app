@@ -10,10 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 Alice alice = Alice(
-    showNotification: true,
-    showInspectorOnShake: true,
-    darkTheme: false,
-    maxCallsCount: 1000);
+    showNotification: true, showInspectorOnShake: true, darkTheme: false, maxCallsCount: 1000);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,9 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: CountryProvider(),
-        ),
+        ChangeNotifierProvider.value(value: CountryProvider()),
       ],
       child: MaterialApp(
         navigatorKey: alice.getNavigatorKey(),

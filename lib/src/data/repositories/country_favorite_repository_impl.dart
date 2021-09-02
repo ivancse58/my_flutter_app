@@ -10,9 +10,7 @@ class CountryFavoriteRepositoryImpl extends CountryFavoriteRepository {
     _box = await Hive.openBox(boxName);
     var key = alpha2Code.toString() + '-' + alpha3Code.toString();
     final bool? value = (_box).get(key) as bool?;
-    var val = false;
-    if (value != null) val = value;
-
+    var val = value != null ? value : false;
     return Future<bool>.value(val);
   }
 

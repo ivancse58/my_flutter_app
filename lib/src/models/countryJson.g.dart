@@ -34,11 +34,8 @@ CountryModel $CountryFromJson(Map<String, dynamic> json) {
         .map((currency) => _$CurrencyFromJson(currency as Map<String, dynamic>))
         .toList(),
     (json['languages'] as List<dynamic>)
-        .map((language) =>
-            _$LanguageResponseFromJson(language as Map<String, dynamic>))
+        .map((language) => _$LanguageResponseFromJson(language as Map<String, dynamic>))
         .toList(),
-    (json['callingCodes'] as List<dynamic>)
-        .map((callingCode) => callingCode as String)
-        .toList(),
+    (json['callingCodes'] as List<dynamic>).map((callingCode) => callingCode as String).toList(),
   );
 }

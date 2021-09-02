@@ -17,8 +17,7 @@ class CountryProvider with ChangeNotifier {
     favKey = FavKey(value.alpha2Code, value.alpha3Code);
     this.lanStr = getLanguage(value);
     this.callingCodeStr = value.callingCodes!.first.toString();
-    this.callingCode =
-        sprintf(AppMessages.labelCallingCodes, [this.callingCodeStr]);
+    this.callingCode = sprintf(AppMessages.labelCallingCodes, [this.callingCodeStr]);
     this.language = sprintf(AppMessages.labelLanguages, [this.lanStr]);
     //notifyListeners();
   }

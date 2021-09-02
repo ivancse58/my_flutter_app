@@ -11,8 +11,7 @@ class DataTabWidget extends StatefulWidget {
   _DataTabWidgetState createState() => _DataTabWidgetState();
 }
 
-class _DataTabWidgetState extends State<DataTabWidget>
-    with SingleTickerProviderStateMixin {
+class _DataTabWidgetState extends State<DataTabWidget> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override

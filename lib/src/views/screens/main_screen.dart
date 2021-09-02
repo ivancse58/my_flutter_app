@@ -5,9 +5,12 @@ import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
 import 'package:my_flutter_app/src/domain/usecase/get_countries_usecase.dart';
 import 'package:my_flutter_app/src/domain/usecase/get_saved_countries_usecase.dart';
 import 'package:my_flutter_app/src/models/country.dart';
+import 'package:my_flutter_app/src/views/providers/country_provider.dart';
+import 'package:my_flutter_app/src/views/widgets/country_list_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../injector.dart';
-import '../widgets/grid_widget.dart';
+import 'country_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -15,10 +18,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  int selectedIndex = -1;
   final _logger = DebugLogger();
+  bool dataReloaded = false;
+
   final GetCountryUseCase _getCountryUseCase = injector<GetCountryUseCase>();
-  final GetSavedCountriesUseCase _getSavedCountriesUseCase =
-      injector<GetSavedCountriesUseCase>();
+  final GetSavedCountriesUseCase _getSavedCountriesUseCase = injector<GetSavedCountriesUseCase>();
   final AppBar _appBar = AppBar(
     title: Text(AppMessages.appName),
   );
@@ -76,10 +81,35 @@ class _MainScreenState extends State<MainScreen> {
       return _buildEmptyWidget(AppMessages.emptyMessage);
     } else {
       return RefreshIndicator(
-        onRefresh: () => _getLatestCountries(setState),
-        child: GridWidget(countryList),
+        onRefresh: () => _getLatestCountries(),
+        child: ListView.builder(
+          itemCount: countryList.length,
+          itemBuilder: (context, index) {
+            final data = countryList[index];
+            return CountryListWidget(
+              data,
+              _getLanguage(data),
+              () => {_navigateCountryScreen(context, data, index)},
+            );
+          },
+        ),
       );
     }
+  }
+
+  String _getLanguage(CountryModel item) {
+    var languages = StringBuffer();
+    final items = item.languages!.map((e) => e.name).toList();
+    for (int i = 0; i < items.length; i++) {
+      languages.write(items[i]);
+      if (i + 1 < items.length) languages.write(', ');
+    }
+    return languages.toString();
+  }
+
+  void _navigateCountryScreen(BuildContext ctx, CountryModel item, int index) {
+    Provider.of<CountryProvider>(ctx, listen: false).setCountry(item, _getLanguage);
+    Navigator.of(ctx).pushNamed(CountryScreen.routeName);
   }
 
   void _showUpdateNotification(String value) {
@@ -87,11 +117,13 @@ class _MainScreenState extends State<MainScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  Future<List<CountryModel>?> _getLatestCountries(Function updateState) async {
+  Future<void> _getLatestCountries() async {
     final dataState = await _getCountryUseCase.call();
     if (dataState is DataSuccess) {
+      setState(() {
+        _logger.log("Data reloaded!");
+      });
       _showUpdateNotification(AppMessages.updateSuccessMessage);
-      return dataState.data;
     }
     if (dataState is DataFailed) {
       _showUpdateNotification(AppMessages.updateErrorMessage);

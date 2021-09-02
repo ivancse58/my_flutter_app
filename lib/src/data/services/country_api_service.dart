@@ -7,8 +7,7 @@ part 'country_api_service.g.dart';
 
 @RestApi(baseUrl: 'https://restcountries.eu')
 abstract class CountryApiService {
-  factory CountryApiService(Dio dio, Alice alice, {String baseUrl}) =
-      _CountryApiService;
+  factory CountryApiService(Dio dio, Alice alice, {String baseUrl}) = _CountryApiService;
 
   @GET('/rest/v2/all')
   Future<HttpResponse<List<CountryModel>?>> getCountryList();

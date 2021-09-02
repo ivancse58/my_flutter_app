@@ -11,6 +11,11 @@ class AppTheme {
       textTheme: ThemeData.light().textTheme.copyWith(
             bodyText1: TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
             bodyText2: TextStyle(color: Color.fromRGBO(20, 51, 51, 1)),
+            headline1: TextStyle(
+              fontSize: 24,
+              fontFamily: fontFamily,
+              fontWeight: FontWeight.bold,
+            ),
             headline2: TextStyle(
               fontSize: 22,
               fontFamily: fontFamily,

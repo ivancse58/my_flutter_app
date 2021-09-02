@@ -10,6 +10,7 @@ import 'package:my_flutter_app/src/models/country.dart';
 
 class CountryRepositoryImpl extends CountryRepository {
   static const boxName = 'CountryData';
+  static const favBoxName = 'CountryFavorite';
   final CountryApiService _countryApiService;
   final _logger = DebugLogger();
 

@@ -44,9 +44,7 @@ class LanguageModelAdapter extends TypeAdapter<LanguageModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LanguageModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is LanguageModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class CurrencyModelAdapter extends TypeAdapter<CurrencyModel> {
@@ -84,9 +82,7 @@ class CurrencyModelAdapter extends TypeAdapter<CurrencyModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CurrencyModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CurrencyModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
 
 class CountryModelAdapter extends TypeAdapter<CountryModel> {
@@ -139,7 +135,5 @@ class CountryModelAdapter extends TypeAdapter<CountryModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CountryModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is CountryModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

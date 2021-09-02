@@ -35,19 +35,14 @@ Future<void> initializeDependencies(
   ));
 
   // Repository
-  injector
-      .registerSingleton<CountryRepository>(CountryRepositoryImpl(injector()));
+  injector.registerSingleton<CountryRepository>(CountryRepositoryImpl(injector()));
 
-  injector.registerSingleton<CountryFavoriteRepository>(
-      CountryFavoriteRepositoryImpl());
+  injector.registerSingleton<CountryFavoriteRepository>(CountryFavoriteRepositoryImpl());
 
   // UseCases
   injector.registerSingleton<GetCountryUseCase>(GetCountryUseCase(injector()));
-  injector.registerSingleton<GetSavedCountriesUseCase>(
-      GetSavedCountriesUseCase(injector()));
+  injector.registerSingleton<GetSavedCountriesUseCase>(GetSavedCountriesUseCase(injector()));
 
-  injector.registerSingleton<SetFavCountryUseCase>(
-      SetFavCountryUseCase(injector()));
-  injector.registerSingleton<GetFavCountryUseCase>(
-      GetFavCountryUseCase(injector()));
+  injector.registerSingleton<SetFavCountryUseCase>(SetFavCountryUseCase(injector()));
+  injector.registerSingleton<GetFavCountryUseCase>(GetFavCountryUseCase(injector()));
 }

@@ -22,15 +22,14 @@ class _CountryApiService implements CountryApiService {
     final _data = <String, dynamic>{};
     _dio.interceptors.add(_alice.getDioInterceptor());
     final _result = await _dio.fetch<List<dynamic>>(
-        _setStreamType<HttpResponse<List<CountryModel>>>(
-            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
-                .compose(_dio.options, '/rest/v2/all',
-                    queryParameters: queryParameters, data: _data)
-                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+        _setStreamType<HttpResponse<List<CountryModel>>>(Options(
+                method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+            .compose(_dio.options, '/rest/v2/all', queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
 
     List<CountryModel> items = [];
-    (_result.data as List<dynamic>).forEach((element) =>
-        items.add($CountryFromJson(element as Map<String, dynamic>)));
+    (_result.data as List<dynamic>)
+        .forEach((element) => items.add($CountryFromJson(element as Map<String, dynamic>)));
     final httpResponse = HttpResponse(items, _result);
     return httpResponse;
   }

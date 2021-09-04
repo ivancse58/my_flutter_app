@@ -5,6 +5,7 @@ class AppMessages {
   static const errorMessage = 'Cannot load data now! Try Again?';
   static const updateSuccessMessage = 'Update data successfully';
   static const updateErrorMessage = 'Unable to Update data!!!';
+  static const favErrorMessage = 'Your favorite list is empty!';
 
   static const labelLanguages = 'Languages: %s';
 

@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:my_flutter_app/src/core/utils/app_messages.dart';
 import 'package:my_flutter_app/src/core/utils/debug_logger.dart';
+import 'package:my_flutter_app/src/domain/entities/country_fav.dart';
 import 'package:my_flutter_app/src/domain/entities/fav_key.dart';
 import 'package:my_flutter_app/src/models/country.dart';
+import 'package:my_flutter_app/src/views/providers/fav_country_provider.dart';
 import 'package:my_flutter_app/src/views/widgets/svg_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:sprintf/sprintf.dart';
+
+import 'country_favorite_widget.dart';
 
 class CountryListWidget extends StatefulWidget {
   static const _flagHeight = 250.0;
@@ -27,6 +33,21 @@ class CountryListWidget extends StatefulWidget {
 class _CountryListWidgetState extends State<CountryListWidget> {
   final _logger = DebugLogger();
 
+  get ctx => null;
+
+  @override
+  void initState() {
+    final countryFavModel = CountryFavModel(
+      widget._countryModel,
+      FavKey(widget._countryModel.alpha2Code, widget._countryModel.alpha2Code),
+      widget._countryModel.alpha2Code.toString() + '-' + widget._countryModel.alpha3Code.toString(),
+    );
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      Provider.of<FavCountryProvider>(context, listen: false).updateFavModel(countryFavModel);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     _logger.log("CountryListWidget");
@@ -34,8 +55,6 @@ class _CountryListWidgetState extends State<CountryListWidget> {
       widget._countryModel.alpha2Code,
       widget._countryModel.alpha3Code,
     );
-    // this is creating loop!
-    //_getFav(favKey);
 
     final callingCode = sprintf(
         AppMessages.labelCallingCodes, [widget._countryModel.callingCodes!.first.toString()]);
@@ -58,6 +77,7 @@ class _CountryListWidgetState extends State<CountryListWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
+                    flex: 7,
                     child: Column(
                       children: [
                         _getContainer(
@@ -77,6 +97,10 @@ class _CountryListWidgetState extends State<CountryListWidget> {
                         SizedBox(height: 8),
                       ],
                     ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: CountryFavoriteWidget(favKey),
                   ),
                 ],
               ),

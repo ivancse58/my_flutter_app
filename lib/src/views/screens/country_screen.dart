@@ -6,15 +6,10 @@ import 'package:provider/provider.dart';
 import '../providers/country_provider.dart';
 import '../widgets/country_favorite_widget.dart';
 
-class CountryScreen extends StatefulWidget {
+class CountryScreen extends StatelessWidget {
   static const routeName = '/country-item';
   static const _flagHeight = 250.0;
 
-  @override
-  _CountryScreenState createState() => _CountryScreenState();
-}
-
-class _CountryScreenState extends State<CountryScreen> {
   @override
   Widget build(BuildContext context) {
     final countryProvider = Provider.of<CountryProvider>(context, listen: false);
@@ -60,7 +55,7 @@ class _CountryScreenState extends State<CountryScreen> {
                         ),
                         Expanded(
                           flex: 3,
-                          child: CountryFavoriteWidget(favKey),
+                          child: CountryFavoriteWidget(-1, favKey),
                         ),
                       ],
                     ),

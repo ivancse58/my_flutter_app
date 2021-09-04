@@ -7,6 +7,7 @@ import 'package:my_flutter_app/src/core/themes/app_theme.dart';
 import 'package:my_flutter_app/src/injector.dart';
 import 'package:my_flutter_app/src/views/providers/country_provider.dart';
 import 'package:my_flutter_app/src/views/providers/fav_country_provider.dart';
+import 'package:my_flutter_app/src/views/providers/fav_remove_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -26,15 +27,10 @@ Future openBox(String boxName) async {
   return await Hive.openBox(boxName);
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   MyHomePage({required Key key}) : super(key: key);
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
       providers: [
         ChangeNotifierProvider.value(value: CountryProvider()),
         ChangeNotifierProvider.value(value: FavCountryProvider()),
+        ChangeNotifierProvider.value(value: FavRemoveProvider()),
       ],
       child: MaterialApp(
         navigatorKey: alice.getNavigatorKey(),

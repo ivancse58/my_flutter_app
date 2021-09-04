@@ -13,55 +13,45 @@ import 'package:sprintf/sprintf.dart';
 
 import 'country_favorite_widget.dart';
 
-class CountryListWidget extends StatefulWidget {
+class CountryListWidget extends StatelessWidget {
   static const _flagHeight = 250.0;
 
   final CountryModel _countryModel;
   final String _languages;
   final Function _navigateCountryScreen;
+  final int _index;
 
   CountryListWidget(
+    this._index,
     this._countryModel,
     this._languages,
     this._navigateCountryScreen,
   );
 
-  @override
-  _CountryListWidgetState createState() => _CountryListWidgetState();
-}
-
-class _CountryListWidgetState extends State<CountryListWidget> {
   final _logger = DebugLogger();
-
-  get ctx => null;
-
-  @override
-  void initState() {
-    final countryFavModel = CountryFavModel(
-      widget._countryModel,
-      FavKey(widget._countryModel.alpha2Code, widget._countryModel.alpha2Code),
-      widget._countryModel.alpha2Code.toString() + '-' + widget._countryModel.alpha3Code.toString(),
-    );
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
-      Provider.of<FavCountryProvider>(context, listen: false).updateFavModel(countryFavModel);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     _logger.log("CountryListWidget");
     final favKey = FavKey(
-      widget._countryModel.alpha2Code,
-      widget._countryModel.alpha3Code,
+      _countryModel.alpha2Code,
+      _countryModel.alpha3Code,
     );
+    final countryFavModel = CountryFavModel(
+      _countryModel,
+      favKey,
+      _countryModel.alpha2Code.toString() + '-' + _countryModel.alpha3Code.toString(),
+    );
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
+      Provider.of<FavCountryProvider>(context, listen: false).updateFavModel(countryFavModel);
+    });
 
-    final callingCode = sprintf(
-        AppMessages.labelCallingCodes, [widget._countryModel.callingCodes!.first.toString()]);
-    final language = sprintf(AppMessages.labelLanguages, [widget._languages]);
+    final callingCode =
+        sprintf(AppMessages.labelCallingCodes, [_countryModel.callingCodes!.first.toString()]);
+    final language = sprintf(AppMessages.labelLanguages, [_languages]);
 
     return InkWell(
-      onTap: () => widget._navigateCountryScreen(),
+      onTap: () => _navigateCountryScreen(),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -81,7 +71,7 @@ class _CountryListWidgetState extends State<CountryListWidget> {
                     child: Column(
                       children: [
                         _getContainer(
-                          widget._countryModel.name,
+                          _countryModel.name,
                           Theme.of(context).textTheme.headline2,
                         ),
                         SizedBox(height: 8),
@@ -100,7 +90,7 @@ class _CountryListWidgetState extends State<CountryListWidget> {
                   ),
                   Expanded(
                     flex: 3,
-                    child: CountryFavoriteWidget(favKey),
+                    child: CountryFavoriteWidget(_index, favKey),
                   ),
                 ],
               ),
@@ -118,7 +108,7 @@ class _CountryListWidgetState extends State<CountryListWidget> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(15)),
-            child: SvgWidget(widget._countryModel.flag!, CountryListWidget._flagHeight),
+            child: SvgWidget(_countryModel.flag!, _flagHeight),
           ),
         ],
       ),

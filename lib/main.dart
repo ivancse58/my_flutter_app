@@ -10,6 +10,7 @@ import 'package:my_flutter_app/src/views/providers/fav_country_provider.dart';
 import 'package:my_flutter_app/src/views/providers/fav_remove_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 Alice alice = Alice(
     showNotification: true, showInspectorOnShake: true, darkTheme: false, maxCallsCount: 1000);
@@ -22,8 +23,12 @@ Future<void> main() async {
 }
 
 Future openBox(String boxName) async {
-  final appDocumentDirectory = await getApplicationDocumentsDirectory();
-  await Hive.initFlutter(appDocumentDirectory.path);
+  if(kIsWeb){
+    await Hive.initFlutter();
+  }else{
+    final appDocumentDirectory = await getApplicationDocumentsDirectory();
+    await Hive.initFlutter(appDocumentDirectory.path);
+  }
   return await Hive.openBox(boxName);
 }
 

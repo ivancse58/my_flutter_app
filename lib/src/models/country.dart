@@ -1,5 +1,6 @@
 //@JsonSerializable()
 
+
 import 'package:hive/hive.dart';
 
 part 'countryHive.g.dart';
@@ -11,19 +12,11 @@ class LanguageModel {
   String? name;
 
   @HiveField(1)
-  String? iso639_1;
-
-  @HiveField(2)
-  String? iso639_2;
-
-  @HiveField(3)
-  String? nativeName;
+  String? code;
 
   LanguageModel(
     this.name,
-    this.iso639_1,
-    this.iso639_2,
-    this.nativeName,
+    this.code,
   );
 }
 
@@ -50,7 +43,7 @@ class CurrencyModel {
 @HiveType(typeId: 0)
 class CountryModel {
   @HiveField(0)
-  String? name;
+  String name;
 
   @HiveField(1)
   String? alpha2Code;
@@ -70,9 +63,6 @@ class CountryModel {
   @HiveField(6)
   List<LanguageModel>? languages;
 
-  @HiveField(7)
-  List<String>? callingCodes;
-
   CountryModel(
     this.name,
     this.alpha2Code,
@@ -81,6 +71,5 @@ class CountryModel {
     this.isFav,
     this.currencies,
     this.languages,
-    this.callingCodes,
   );
 }

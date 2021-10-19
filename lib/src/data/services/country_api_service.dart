@@ -5,10 +5,10 @@ import 'package:retrofit/retrofit.dart';
 
 part 'country_api_service.g.dart';
 
-@RestApi(baseUrl: 'https://restcountries.eu')
+@RestApi(baseUrl: 'https://restcountries.com')
 abstract class CountryApiService {
   factory CountryApiService(Dio dio, Alice alice, {String baseUrl}) = _CountryApiService;
 
-  @GET('/rest/v2/all')
+  @GET('/v3.1/all')
   Future<HttpResponse<List<CountryModel>?>> getCountryList();
 }

@@ -15,7 +15,6 @@ class CountryScreen extends StatelessWidget {
     final countryProvider = Provider.of<CountryProvider>(context, listen: false);
     final name = countryProvider.item?.name;
     final flag = countryProvider.item?.flag;
-    final callingCode = countryProvider.callingCode;
     final language = countryProvider.language;
     final favKey = FavKey(countryProvider.item?.alpha2Code, countryProvider.item?.alpha3Code);
 
@@ -45,8 +44,6 @@ class CountryScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               _getContainer(name, Theme.of(context).textTheme.headline1),
-                              SizedBox(height: 16),
-                              _getContainer(callingCode, Theme.of(context).textTheme.headline6),
                               SizedBox(height: 16),
                               _getContainer(language, Theme.of(context).textTheme.headline6),
                               SizedBox(height: 16)

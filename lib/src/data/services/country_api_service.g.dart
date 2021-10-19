@@ -8,11 +8,12 @@ part of 'country_api_service.dart';
 
 class _CountryApiService implements CountryApiService {
   _CountryApiService(this._dio, this._alice, {this.baseUrl}) {
-    baseUrl ??= 'https://restcountries.eu';
+    baseUrl ??= 'https://restcountries.com';
   }
 
   final Alice _alice;
   final Dio _dio;
+
   String? baseUrl;
 
   @override
@@ -22,14 +23,14 @@ class _CountryApiService implements CountryApiService {
     final _data = <String, dynamic>{};
     _dio.interceptors.add(_alice.getDioInterceptor());
     final _result = await _dio.fetch<List<dynamic>>(
-        _setStreamType<HttpResponse<List<CountryModel>>>(Options(
-                method: 'GET', headers: <String, dynamic>{}, extra: _extra)
-            .compose(_dio.options, '/rest/v2/all', queryParameters: queryParameters, data: _data)
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-
+        _setStreamType<HttpResponse<List<CountryModel>>>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/v3.1/all', queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     List<CountryModel> items = [];
     (_result.data as List<dynamic>)
         .forEach((element) => items.add($CountryFromJson(element as Map<String, dynamic>)));
+    items = items..sort((a, b) => a.name.compareTo(b.name));
     final httpResponse = HttpResponse(items, _result);
     return httpResponse;
   }

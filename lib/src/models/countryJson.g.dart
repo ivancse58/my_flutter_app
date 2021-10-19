@@ -6,36 +6,38 @@ part of 'country.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LanguageModel _$LanguageResponseFromJson(Map<String, dynamic> json) {
-  return LanguageModel(
-    json['name'] as String?,
-    json['iso639_1'] as String?,
-    json['iso639_2'] as String?,
-    json['nativeName'] as String?,
-  );
-}
-
-CurrencyModel _$CurrencyFromJson(Map<String, dynamic> json) {
-  return CurrencyModel(
-    json['code'] as String?,
-    json['name'] as String?,
-    json['symbol'] as String?,
-  );
-}
-
 CountryModel $CountryFromJson(Map<String, dynamic> json) {
+  Map<String, dynamic> name = json['name'] as Map<String, dynamic>;
+  Map<String, dynamic> flags = json['flags'] as Map<String, dynamic>;
+  Map<String, dynamic>? currencies = json['currencies'] as Map<String, dynamic>?;
+  Map<String, dynamic>? languages = json['languages'] as Map<String, dynamic>?;
+  List<CurrencyModel> currencyList = [];
+  if (currencies != null)
+    for (var entry in currencies.entries) {
+      var cm = CurrencyModel(
+        entry.key,
+        entry.value['name'] as String?,
+        entry.value['symbol'] as String?,
+      );
+      currencyList.add(cm);
+    }
+
+  List<LanguageModel> languageList = [];
+  if (languages != null)
+    for (var entry in languages.entries) {
+      var lm = LanguageModel(
+        entry.value as String?,
+        entry.key,
+      );
+      languageList.add(lm);
+    }
   return CountryModel(
-    json['name'] as String?,
-    json['alpha2Code'] as String?,
-    json['alpha3Code'] as String?,
-    json['flag'] as String?,
+    name['common'] as String,
+    json['cca2'] as String?,
+    json['cca3'] as String?,
+    flags['svg'] as String?,
     json['isFav'] as bool?,
-    (json['currencies'] as List<dynamic>)
-        .map((currency) => _$CurrencyFromJson(currency as Map<String, dynamic>))
-        .toList(),
-    (json['languages'] as List<dynamic>)
-        .map((language) => _$LanguageResponseFromJson(language as Map<String, dynamic>))
-        .toList(),
-    (json['callingCodes'] as List<dynamic>).map((callingCode) => callingCode as String).toList(),
+    currencyList,
+    languageList,
   );
 }

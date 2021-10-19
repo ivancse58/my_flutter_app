@@ -1,7 +1,7 @@
 # My flutter app
 ## My 1st flutter app and fetch data from open api
 -------------------------
-Fetch Sample country list from https://restcountries.eu/rest/v2/all
+Fetch Sample country list from https://restcountries.com/v3.1/all
 and Show all country list into a list view
 -------------------------
 ## Overall app flow:

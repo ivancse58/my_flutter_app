@@ -46,8 +46,6 @@ class CountryListWidget extends StatelessWidget {
       Provider.of<FavCountryProvider>(context, listen: false).updateFavModel(countryFavModel);
     });
 
-    final callingCode =
-        sprintf(AppMessages.labelCallingCodes, [_countryModel.callingCodes!.first.toString()]);
     final language = sprintf(AppMessages.labelLanguages, [_languages]);
 
     return InkWell(
@@ -73,11 +71,6 @@ class CountryListWidget extends StatelessWidget {
                         _getContainer(
                           _countryModel.name,
                           Theme.of(context).textTheme.headline2,
-                        ),
-                        SizedBox(height: 8),
-                        _getContainer(
-                          callingCode,
-                          Theme.of(context).textTheme.headline6,
                         ),
                         SizedBox(height: 8),
                         _getContainer(

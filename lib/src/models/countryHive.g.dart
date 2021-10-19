@@ -19,23 +19,17 @@ class LanguageModelAdapter extends TypeAdapter<LanguageModel> {
     return LanguageModel(
       fields[0] as String?,
       fields[1] as String?,
-      fields[2] as String?,
-      fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, LanguageModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
-      ..write(obj.iso639_1)
-      ..writeByte(2)
-      ..write(obj.iso639_2)
-      ..writeByte(3)
-      ..write(obj.nativeName);
+      ..write(obj.code);
   }
 
   @override
@@ -96,21 +90,20 @@ class CountryModelAdapter extends TypeAdapter<CountryModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CountryModel(
-      fields[0] as String?,
+      fields[0] as String,
       fields[1] as String?,
       fields[2] as String?,
       fields[3] as String?,
       fields[4] as bool?,
       (fields[5] as List?)?.cast<CurrencyModel>(),
       (fields[6] as List?)?.cast<LanguageModel>(),
-      (fields[7] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, CountryModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -124,9 +117,7 @@ class CountryModelAdapter extends TypeAdapter<CountryModel> {
       ..writeByte(5)
       ..write(obj.currencies)
       ..writeByte(6)
-      ..write(obj.languages)
-      ..writeByte(7)
-      ..write(obj.callingCodes);
+      ..write(obj.languages);
   }
 
   @override
